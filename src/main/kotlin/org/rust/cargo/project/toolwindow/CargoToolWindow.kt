@@ -18,6 +18,8 @@ import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.content.ContentFactory
 import com.intellij.util.ui.UIUtil
 import org.rust.cargo.project.model.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import javax.swing.JComponent
 import javax.swing.JEditorPane
 
@@ -62,7 +64,13 @@ private class CargoToolWindow(
     }
 
     private val projectStructure = CargoProjectStructure()
-    private val projectTree = CargoProjectStructureTree(projectStructure)
+    private val projectTree = CargoProjectStructureTree(projectStructure).apply {
+        addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                val isDoubleClick = e.clickCount == 2
+            }
+        })
+    }
 
     val selectedProject: CargoProject? get() = projectTree.selectedProject
 
