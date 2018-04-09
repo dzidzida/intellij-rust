@@ -28,11 +28,10 @@ class CargoProjectStructureTree(model: CargoProjectStructure) : SimpleTree(model
         isRootVisible = false
         emptyText.text = "There are no Cargo projects to display."
         selectionModel.selectionMode = TreeSelectionModel.SINGLE_TREE_SELECTION
-        cellRenderer = CargoProjectTreeRender()
     }
 }
 
-private class CargoProjectTreeRender : ColoredTreeCellRenderer() {
+class CargoProjectTreeRenderer : ColoredTreeCellRenderer() {
 
     override fun customizeCellRenderer(tree: JTree, value: Any?, selected: Boolean, expanded: Boolean, leaf: Boolean, row: Int, hasFocus: Boolean) {
         val node = (value as? DefaultMutableTreeNode)?.userObject as? CargoProjectStructure.Node ?: return

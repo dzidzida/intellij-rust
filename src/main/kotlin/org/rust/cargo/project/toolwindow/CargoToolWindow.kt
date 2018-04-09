@@ -65,6 +65,7 @@ private class CargoToolWindow(
 
     private val projectStructure = CargoProjectStructure()
     private val projectTree = CargoProjectStructureTree(projectStructure).apply {
+        cellRenderer = CargoProjectTreeRenderer()
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
                 val isDoubleClick = e.clickCount == 2
