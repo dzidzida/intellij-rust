@@ -18,10 +18,12 @@ import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.content.ContentFactory
 import com.intellij.util.ui.UIUtil
 import org.rust.cargo.project.model.*
+import org.rust.cargo.toolchain.CargoCommandLine
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.JComponent
 import javax.swing.JEditorPane
+import javax.swing.tree.DefaultMutableTreeNode
 
 class CargoToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
@@ -68,7 +70,13 @@ private class CargoToolWindow(
         cellRenderer = CargoProjectTreeRenderer()
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
-                val isDoubleClick = e.clickCount == 2
+                if (e.clickCount < 2) return
+                val tree = e.source as? CargoProjectStructureTree ?: return
+                val node = tree.selectionModel.selectionPath
+                    ?.lastPathComponent as? DefaultMutableTreeNode ?: return
+                val target = node.userObject as? CargoProjectStructure.Node.Target ?: return
+                val cml = CargoCommandLine.forTarget(target.target, "run")
+
             }
         })
     }
